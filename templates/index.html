@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>MFY Ma'lumotlar Bazasi</title>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Joylashuvlar-->
+        <div class="w-64 bg-slate-900 text-white fixed h-full p-6">
+            <h1 class="text-xl font-bold mb-10 text-indigo-400 border-b border-slate-700 pb-4">MFY Sistema v2.0</h1>
+            <nav class="space-y-4" id="main-nav">
+                <button onclick="showSection('stats')" class="w-full text-left py-2 px-4 hover:bg-slate-800 rounded transition bg-slate-800" id="btn-stats">📊 Statistika</button>
+                <button onclick="showSection('xonadonlar')" class="w-full text-left py-2 px-4 hover:bg-slate-800 rounded transition" id="btn-xonadonlar">🏠 Xonadonlar</button>
+                <button onclick="showSection('aholi')" class="w-full text-left py-2 px-4 hover:bg-slate-800 rounded transition" id="btn-aholi">👥 Aholi</button>
+                <button onclick="showSection('arizalar')" class="w-full text-left py-2 px-4 hover:bg-slate-800 rounded transition" id="btn-arizalar">📑 Arizalar</button>
+                <button onclick="showSection('infra')" class="w-full text-left py-2 px-4 hover:bg-slate-800 rounded transition" id="btn-infra">🏗️ Infratuzilma</button>
+                <button onclick="showSection('xodimlar')" class="w-full text-left py-2 px-4 hover:bg-slate-800 rounded transition" id="btn-xodimlar">👮 Xodimlar</button>
+                <button onclick="showSection('hodisalar')" class="w-full text-left py-2 px-4 hover:bg-slate-800 rounded transition" id="btn-hodisalar">🚨 Hodisalar</button>
+                <hr class="border-slate-700 my-4">
+                <a href="/docs" class="block py-2 px-4 text-orange-400 font-bold hover:bg-slate-800 rounded">🚀 API Swagger</a>
+            </nav>
+        </div>
+
+        <!-- Asosiy qism -->
+        <div class="flex-1 ml-64 p-10">
+            
+            <section id="sec-stats" class="content-section">
+                <h2 class="text-2xl font-bold mb-6 text-slate-800">Tizim Statistikasi</h2>
+                <div class="grid grid-cols-3 gap-8 mb-10">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border-l-8 border-indigo-500">
+                        <h4 class="text-gray-500 text-sm font-bold uppercase">Umumiy Aholi</h4>
+                        <p class="text-4xl font-black mt-2 text-slate-800">{{ stats.aholi_soni }}</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border-l-8 border-emerald-500">
+                        <h4 class="text-gray-500 text-sm font-bold uppercase">Xonadonlar</h4>
+                        <p class="text-4xl font-black mt-2 text-slate-800">{{ stats.xonadonlar_soni }}</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border-l-8 border-amber-500">
+                        <h4 class="text-gray-500 text-sm font-bold uppercase">Arizalar</h4>
+                        <p class="text-4xl font-black mt-2 text-slate-800">{{ stats.arizalar_soni }}</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border-l-8 border-pink-500">
+                        <h4 class="text-gray-500 text-sm font-bold uppercase">Infratuzilmalar</h4>
+                        <p class="text-4xl font-black mt-2 text-slate-800">{{ stats.infratuzilmalar_soni }}</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border-l-8 border-red-500">
+                        <h4 class="text-gray-500 text-sm font-bold uppercase">Hodisalar</h4>
+                        <p class="text-4xl font-black mt-2 text-slate-800">{{ stats.hodisalar_soni }}</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border-l-8 border-slate-700">
+                        <h4 class="text-gray-500 text-sm font-bold uppercase">Xodimlar</h4>
+                        <p class="text-4xl font-black mt-2 text-slate-800">{{ stats.xodimlar_soni }}</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sec-xonadonlar" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border">
+                    <div class="bg-slate-50 p-5 font-bold text-lg border-b">🏠 Xonadonlar ro'yxati</div>
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+                            <tr>
+                                <th class="p-4">ID</th> <th class="p-4">Manzil</th> <th class="p-4">Uy egasi</th> <th class="p-4 text-right">Qarz (so'm)</th> </tr>
+                        </thead>
+                        <tbody>
+                            {% for x in xonadonlar %}
+                            <tr class="border-b hover:bg-slate-50">
+                                <td class="p-4">#{{ x.xonadon_id }}</td>
+                                <td class="p-4 font-semibold">{{ x.manzili }}</td>
+                                <td class="p-4">{{ x.uy_egasi }}</td>
+                                <td class="p-4 text-right font-bold text-red-600">{{ x.qarzlar }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="sec-aholi" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border">
+                    <div class="bg-slate-50 p-5 font-bold text-lg border-b">👥 Aholi ma'lumotlari</div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+                                <tr>
+                                    <th class="p-4">F.I.O</th> <th class="p-4">Tug'ilgan sana</th> <th class="p-4">Jinsi</th> <th class="p-4">Pasport</th> <th class="p-4">Telefon</th> <th class="p-4">Ijtimoiy holat</th> <th class="p-4">Xonadon ID</th> </tr>
+                            </thead>
+                            <tbody>
+                                {% for a in aholi %}
+                                <tr class="border-b hover:bg-slate-50">
+                                    <td class="p-4 font-bold">{{ a.fio }}</td>
+                                    <td class="p-4">{{ a.tugilgan_sana }}</td>
+                                    <td class="p-4">{{ a.jinsi }}</td>
+                                    <td class="p-4 font-mono text-sm">{{ a.pasport_malumot }}</td>
+                                    <td class="p-4">{{ a.telefon }}</td>
+                                    <td class="p-4"><span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">{{ a.ijtimoiy_holati }}</span></td>
+                                    <td class="p-4 text-gray-400">#{{ a.xonadon_id }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sec-arizalar" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border">
+                    <div class="bg-slate-50 p-5 font-bold text-lg border-b">📑 Murojaatlar jurnali</div>
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+                            <tr>
+                                <th class="p-4">ID</th> <th class="p-4">Muallif</th> <th class="p-4">Tafsilot</th> <th class="p-4">Holati</th> <th class="p-4">Aholi ID</th> </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in arizalar %}
+                            <tr class="border-b hover:bg-slate-50">
+                                <td class="p-4">#{{ a.ariza_id }}</td>
+                                <td class="p-4 font-bold">{{ a.ariza_beruvchi }}</td>
+                                <td class="p-4 text-sm text-gray-600">{{ a.tafsilotlari }}</td>
+                                <td class="p-4"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-bold">{{ a.ariza_holati }}</span></td>
+                                <td class="p-4 text-xs">Aholi #{{ a.aholi_id }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="sec-infra" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border">
+                    <div class="bg-slate-50 p-5 font-bold text-lg border-b">🏗️ Infratuzilma ob'ektlari</div>
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+                            <tr>
+                                <th class="p-4">Turi</th> <th class="p-4">Holati</th> <th class="p-4">Manzili</th> <th class="p-4">Mas'ul</th> </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in infra %}
+                            <tr class="border-b">
+                                <td class="p-4 font-bold">{{ i.turi }}</td>
+                                <td class="p-4 text-green-600 font-medium">{{ i.holati }}</td>
+                                <td class="p-4">{{ i.manzili }}</td>
+                                <td class="p-4 text-gray-500">{{ i.masul_tashkilot }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="sec-xodimlar" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border">
+                    <div class="bg-slate-50 p-5 font-bold text-lg border-b">👮 Mahalla xodimlari</div>
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+                            <tr>
+                                <th class="p-4">F.I.O</th> <th class="p-4">Lavozimi</th> <th class="p-4">Aloqa</th> </tr>
+                        </thead>
+                        <tbody>
+                            {% for x in xodimlar %}
+                            <tr class="border-b">
+                                <td class="p-4 font-bold text-slate-800">{{ x.fio }}</td>
+                                <td class="p-4 text-indigo-600">{{ x.lavozimi }}</td>
+                                <td class="p-4 font-mono">{{ x.aloqa_nomeri }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="sec-hodisalar" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border">
+                    <div class="bg-slate-50 p-5 font-bold text-lg border-b text-red-600">🚨 Hodisalar qaydi</div>
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+                            <tr>
+                                <th class="p-4">Vaqti</th> <th class="p-4">Joyi</th> <th class="p-4">Hodisa_Turi</th> <th class="p-4">Xodim ID</th> </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in hodisalar %}
+                            <tr class="border-b hover:bg-red-50">
+                                <td class="p-4 text-gray-500">{{ h.formatted_date }}</td>
+                                <td class="p-4 font-semibold">{{ h.joyi }}</td>
+                                <td class="p-4 text-red-700">{{ h.zarar }}</td>
+                                <td class="p-4 text-xs font-mono">Xodim #{{ h.xodim_id }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+        </div>
+    
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hamma bo'limlarni yashirish
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Tanlangan bo'limni ko'rsatish
+            document.getElementById('sec-' + sectionId).classList.remove('hidden');
+            
+            // Tugmalarning rangini boshqarish
+            document.querySelectorAll('#main-nav button').forEach(btn => {
+                btn.classList.remove('bg-slate-800');
+            });
+            document.getElementById('btn-' + sectionId).classList.add('bg-slate-800');
+        }
+    </script>
+</body>
+</html>
